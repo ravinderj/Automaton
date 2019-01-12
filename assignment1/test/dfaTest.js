@@ -1,5 +1,6 @@
 const assert = require('assert');
 const DFA = require('../dfa.js');
+const testData = require('./testData.json');
 
 const test = {};
 exports.test = test;
@@ -18,4 +19,20 @@ test['should return true for test string with odd number of zeroes'] = function(
   assert.ok(dfa.doesAccept('000'));
   assert.ok(!dfa.doesAccept('0000'));
   assert.ok(dfa.doesAccept('00000'));
+}
+
+test['run regression test'] = function() {
+  for(let testCase of testData) {
+    if (testCase['type'] == 'dfa') {
+
+      console.log('---',testCase['name'])
+      let dfa = new DFA(testCase['tuple']);
+      for(let testString of testCase['pass-cases']) {
+        assert.ok(dfa.doesAccept(testString));
+      }
+      for(let testString of testCase['fail-cases']) {
+        assert.ok(!dfa.doesAccept(testString));
+      }
+    }
+  }
 }
